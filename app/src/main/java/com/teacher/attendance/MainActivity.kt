@@ -15,6 +15,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import java.io.File
 
 class MainActivity : Activity() {
     private lateinit var webView: WebView
@@ -77,6 +78,21 @@ class MainActivity : Activity() {
     }
 
     inner class AppBridge {
+        @JavascriptInterface
+        fun saveAutoBackup(json: String) {
+            try {
+                val backupDir = File(filesDir, "backups")
+                if (!backupDir.exists()) backupDir.mkdirs()
+                val stamp = java.text.SimpleDateFormat("yyyyMMdd_HHmmss", java.util.Locale.US).format(java.util.Date())
+                File(backupDir, "attendance_auto_$stamp.json").writeText(json, Charsets.UTF_8)
+                backupDir.listFiles()?.filter { it.name.startsWith("attendance_auto_") && it.name.endsWith(".json") }
+                    ?.sortedByDescending { it.lastModified() }?.drop(3)?.forEach { it.delete() }
+                runOnUiThread { Toast.makeText(this@MainActivity, "نسخه پشتیبان خودکار در حافظه برنامه ذخیره شد", Toast.LENGTH_SHORT).show() }
+            } catch (_: Exception) {
+                runOnUiThread { Toast.makeText(this@MainActivity, "ذخیره نسخه پشتیبان خودکار ناموفق بود", Toast.LENGTH_LONG).show() }
+            }
+        }
+
         @JavascriptInterface
         fun saveFile(base64: String, name: String, mime: String) {
             try {
