@@ -1,0 +1,71 @@
+خیره نسخه پشتیبان</button></div>
+<div class="tabs"><button id="t1" class="on">📝 ثبت امروز</button><button id="t2">🔎 جستجو و سابقه</button><button id="t3">👨‍👩‍👧 خانواده</button><button id="t4">📊 گزارش ماهانه</button><button id="t5">🎤 نام‌خوانی</button><button id="t6">📈 داشبورد</button></div>
+
+<section id="v1">
+  <div class="warn bad" id="alert"></div>
+  <div class="sum">
+    <div class="p">😊 حاضر<b id="cp">۰</b></div>
+    <div class="a">😢 غایب<b id="ca">۰</b></div>
+    <div class="l">⏰ تأخیر<b id="cl">۰</b></div>
+  </div>
+  <div class="row bar">
+    <button class="btn main" id="png">🖼️ تصویر PNG</button>
+    <button class="btn main" id="jpg">🖼️ تصویر JPG</button>
+    <button class="btn" id="allp">✅ ثبت: همه حاضرند</button>
+    <button class="btn main" id="fin"></button><button class="btn" id="sort">🔤 ترتیب الفبایی</button><button class="btn" id="plist">🖨️ چاپ لیست کلاس</button>
+  </div>
+  <div class="row bar">
+    <input type="text" id="newname" placeholder="نام دانش‌آموز جدید" aria-label="نام دانش‌آموز جدید" style="flex:1;min-width:160px">
+    <button class="btn main" id="add">➕ افزودن</button>
+    <span class="hint" id="cap"></span>
+  </div>
+  <input type="text" id="dq" placeholder="🔎 جستجوی سریع در لیست…" aria-label="جستجوی سریع" style="width:100%;margin-bottom:10px">
+  <div id="list"></div>
+  <details class="card">
+    <summary>⚙️ نام‌ها، نسخه پشتیبان</summary>
+    <p class="hint">افزودن چندنفره: هر نام در یک خط. نام‌های تکراری اضافه نمی‌شوند.</p>
+    <textarea id="names" aria-label="نام‌های جدید"></textarea>
+    <button class="btn main" id="addmany">افزودن این نام‌ها</button>
+    <p><b>کنار گذاشته‌شده‌ها</b> <span class="hint">(سابقه‌شان نگه داشته می‌شود)</span></p>
+    <div id="arch" class="chips"></div>
+    <p><b>هشدار غیبت ماهانه</b></p>
+    <div class="row"><span>از</span><input type="number" id="thr" min="1" style="width:80px"><span>غیبت در یک ماه شمسی به بالا</span></div>
+    <p><b>نسخه پشتیبان</b> <span class="hint" id="lastbk"></span></p>
+    <p class="hint">هر نسخه پشتیبان شامل همه کلاس‌ها و تمام اطلاعات ثبت‌شده تا امروز است. بازیابی، اطلاعات را ادغام می‌کند و چیزی از اطلاعات فعلی حذف نمی‌شود.</p>
+    <div class="row">
+      <button class="btn main" id="bk">💾 ذخیره نسخه پشتیبان</button>
+      <button class="btn" id="pick">📁 انتخاب پوشه بکاپ</button>
+      <label class="btn" style="cursor:pointer">📂 بازیابی از نسخه پشتیبان<input type="file" id="rs" accept=".json" hidden></label>
+    </div>
+    <p class="hint" id="dirname"></p>
+  </details>
+</section>
+
+<section id="v2" hidden>
+  <div class="card">
+    <input type="text" id="q" placeholder="نام دانش‌آموز را بنویسید…" aria-label="جستجوی نام" style="width:100%;font-size:17px">
+    <div class="chips" id="chips"></div>
+    <div id="hist"></div>
+  </div>
+  <div class="card"><b>🔍 جستجوی پیشرفته</b>
+    <div class="row" style="margin:8px 0">
+      <label>از <input type="date" id="f1"></label><label>تا <input type="date" id="f2"></label>
+      <select id="fs" aria-label="وضعیت"><option value="">همه وضعیت‌ها</option><option value="a">غایب</option><option value="l">تأخیر</option><option value="p">حاضر</option></select>
+      <input type="text" id="fr" placeholder="دلیل (مثلاً بیماری)" aria-label="دلیل">
+      <button class="btn main" id="fgo">نمایش</button>
+    </div>
+    <div id="fres"></div>
+  </div>
+</section>
+<section id="v3" hidden><p class="hint">برای انتخاب عکس، روی دایره کنار نام بزنید.</p><div id="fam"></div></section>
+<section id="v4" hidden><div class="card"><div class="row"><select id="rm" aria-label="ماه"></select><button class="btn main" id="repimg">🖼️ دانلود تصویر گزارش</button><button class="btn" id="csv">📄 خروجی Excel (CSV)</button></div>
+<p class="hint">ردیف قرمز یعنی غیبت به حد هشدار رسیده است. روزهای تعطیل حساب نمی‌شوند.</p><div id="rt"></div></div></section>
+<section id="v5" hidden><div id="rc"></div></section>
+<section id="v6" hidden><div class="card"><select id="dm" aria-label="ماه"></select><div id="dash"></div></div></section>
+<p class="hint">اطلاعات در برنامه ذخیره می‌شود. هر هفته یک نسخه پشتیبان بگیرید.</p>
+</div>
+<div id="cal" hidden><div class="box"><div id="calbody"></div></div></div>
+<div id="pr"></div>
+<script src="app.bundle.js"></script>
+</body>
+</html>
