@@ -15,7 +15,6 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
-import android.app.Activity
 
 class MainActivity : Activity() {
     private lateinit var webView: WebView
