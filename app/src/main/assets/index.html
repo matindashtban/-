@@ -78,10 +78,17 @@ select{font:inherit;border:2px solid #d5dbe6;border-radius:14px;padding:6px 10px
 .toolbar{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}.toolbar input{flex:1;min-width:130px}.st{touch-action:pan-y}.statusline{font-size:13px;color:var(--mute);margin:6px 0}.btn:active,.seg button:active{transform:scale(.98)}
 @media(min-width:700px){.wrap{max-width:1100px}.st{padding:14px 18px}.name{font-size:19px}}
 @media(max-width:520px){.sum{gap:5px}.sum div{font-size:13px;padding:7px 3px}.sum b{font-size:22px}.seg{width:100%;justify-content:space-between}.seg button{flex:1;min-height:42px}.top .name{min-width:calc(100% - 65px)}.fg{grid-template-columns:1fr}}
+
+.menu-trigger{position:fixed;left:14px;top:14px;z-index:30;border:0;border-radius:14px;padding:10px 14px;background:#2b2d42;color:#fff;font-size:20px;box-shadow:0 3px 10px #0003}
+.tabs{position:fixed;left:0;top:0;bottom:0;width:min(290px,82vw);z-index:41;display:flex;flex-direction:column;flex-wrap:nowrap;gap:9px;padding:76px 14px 18px;background:#fff;box-shadow:5px 0 24px #0003;overflow-y:auto;transform:translateX(-110%);transition:transform .25s ease;margin:0;border-radius:0}
+.tabs.open{transform:translateX(0)}.tabs button{flex:none;width:100%;min-width:0;text-align:right;padding:13px 14px;font-size:16px}
+.drawer-shade{position:fixed;inset:0;background:#0007;z-index:40;display:none}.drawer-shade.show{display:block}
+body.drawer-open{overflow:hidden}
+@media(max-width:520px){header{padding-left:62px}}
 </style>
 </head>
 <body>
-<div class="wrap">
+<button class="menu-trigger" id="menuTrigger" aria-label="باز کردن منو">☰</button><div class="drawer-shade" id="drawerShade"></div><div class="wrap">
 <header>
   <h1>🌈 حضور و غیاب کلاس</h1>
   <div class="row">
@@ -91,7 +98,7 @@ select{font:inherit;border:2px solid #d5dbe6;border-radius:14px;padding:6px 10px
   <div class="jdate"><span id="jdate"></span> <span id="saved"></span></div><div class="toolbar"><select id="classPick" aria-label="انتخاب کلاس"></select><button class="btn" id="newClass">➕ کلاس جدید</button><button class="btn" id="theme">🌙 حالت تاریک</button></div>
 </header>
 <div class="warn" id="warn">💾 مدتی است نسخه پشتیبان نگرفته‌اید. <button class="btn" id="bk0">ذخیره نسخه پشتیبان</button></div>
-<div class="tabs"><button id="t1" class="on">📝 ثبت امروز</button><button id="t2">🔎 جستجو و سابقه</button><button id="t3">👨‍👩‍👧 خانواده</button><button id="t4">📊 گزارش ماهانه</button><button id="t5">🎤 نام‌خوانی</button><button id="t6">📈 داشبورد</button></div>
+<nav class="tabs" id="drawerMenu" aria-label="منوی اصلی"><button id="t1" class="on">📝 ثبت امروز</button><button id="t2">🔎 جستجو و سابقه</button><button id="t3">👨‍👩‍👧 خانواده</button><button id="t4">📊 گزارش ماهانه</button><button id="t5">🎤 نام‌خوانی</button><button id="t6">📈 داشبورد</button></nav>
 
 <section id="v1">
   <div class="warn" id="alert" style="background:#ffe3e3"></div>
@@ -159,6 +166,14 @@ select{font:inherit;border:2px solid #d5dbe6;border-radius:14px;padding:6px 10px
 <script>
 const KEY='attendance_v2',MAX=50;
 const $=id=>document.getElementById(id);
+const drawer=$('drawerMenu'),shade=$('drawerShade');
+function closeDrawer(){drawer.classList.remove('open');shade.classList.remove('show');document.body.classList.remove('drawer-open')}
+function openDrawer(){drawer.classList.add('open');shade.classList.add('show');document.body.classList.add('drawer-open')}
+$('menuTrigger').onclick=openDrawer;shade.onclick=closeDrawer;
+let touchStartX=0,touchStartY=0;
+document.addEventListener('touchstart',e=>{const t=e.changedTouches[0];touchStartX=t.clientX;touchStartY=t.clientY},{passive:true});
+document.addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-touchStartX,dy=t.clientY-touchStartY;if(Math.abs(dy)>70)return;if(!drawer.classList.contains('open')&&touchStartX<28&&dx>65)openDrawer();else if(drawer.classList.contains('open')&&dx< -65)closeDrawer()},{passive:true});
+
 const fa=n=>Number(n).toLocaleString('fa-IR');
 const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 const LBL={p:'حاضر',a:'غایب',l:'تأخیر'},EM={p:'😊',a:'😢',l:'⏰'},COL={p:'#2ec4b6',a:'#ef476f',l:'#ff9f1c'};
@@ -297,7 +312,8 @@ $('cls').oninput=()=>{S.cls=$('cls').value;save()};
 
 function show(n){
   for(let i=1;i<=6;i++){$('v'+i).hidden=n!==i;$('t'+i).className=n===i?'on':''}
-  if(n===2)$('q').focus();if(n===3)famRender();if(n===4)repRender();if(n===5){rc=0;rcRender()}if(n===6)dashRender();
+  if(n===2)$('q').focus();if(n===3)famRender();if(n===4)repRender();if(n===5){rc=0;rcRender()}if(n===6)dashRender();;
+  closeDrawer();
 }
 [1,2,3,4,5,6].forEach(i=>$('t'+i).onclick=()=>show(i));
 const RS=['بیماری','مسافرت','مشکل خانوادگی','ترافیک'];
@@ -666,7 +682,7 @@ $('cal').onclick=e=>{if(e.target.id==='cal')$('cal').hidden=true};
   const i=$(id),b=el('button','btn');b.id='jb_'+id;b.type='button';b.onclick=()=>calOpen(id);
   i.style.display='none';i.parentNode.insertBefore(b,i);
 });
-function autoSnapshot(){try{const key='att_backup_history',h=JSON.parse(localStorage.getItem(key)||'[]');const now=Date.now();if(!h.length||now-h[0].ts>=24*3600*1000){h.unshift({ts:now,data:JSON.stringify(S)});localStorage.setItem(key,JSON.stringify(h.slice(0,3)));$('lastbk').textContent='آخرین نسخه خودکار: '+new Date(now).toLocaleString('fa-IR')+' (در همین مرورگر)';}}catch(e){console.warn('Auto backup failed',e)}}
+function autoSnapshot(){try{const key='att_backup_history',h=JSON.parse(localStorage.getItem(key)||'[]');const now=Date.now();if(!h.length||now-h[0].ts>=24*3600*1000){const data=JSON.stringify(S);h.unshift({ts:now,data});localStorage.setItem(key,JSON.stringify(h.slice(0,3)));if(window.AndroidBridge&&AndroidBridge.saveAutoBackup)AndroidBridge.saveAutoBackup(data);$('lastbk').textContent='آخرین نسخه خودکار: '+new Date(now).toLocaleString('fa-IR')+' (در پوشه خصوصی برنامه)';}}catch(e){console.warn('Auto backup failed',e)}}
 autoSnapshot();setInterval(autoSnapshot,60*60*1000);
 $('restoreAuto').onclick=()=>{try{const h=JSON.parse(localStorage.getItem('att_backup_history')||'[]');if(!h.length)return alert('نسخه خودکاری وجود ندارد.');const labels=h.map((x,i)=>(i+1)+') '+new Date(x.ts).toLocaleString('fa-IR')).join('\n');const n=+(prompt('شماره نسخه برای بازیابی را وارد کنید:\n'+labels)||0);if(!n||!h[n-1])return;const o=JSON.parse(h[n-1].data);if(!validateBackup(o))return alert('نسخه خودکار سالم نیست.');if(!confirm('اطلاعات فعلی جایگزین شود؟'))return;S=Object.assign(S,o);save();classUi();$('cls').value=S.cls;render()}catch(e){alert('بازیابی نسخه خودکار ناموفق بود.')}};
 $('thr').value=S.thr;classUi();initDir();render();
