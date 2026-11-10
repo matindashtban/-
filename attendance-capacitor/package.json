@@ -12,10 +12,10 @@
   "dependencies": {
     "@capacitor/android": "8.6.0",
     "@capacitor/core": "8.6.0",
-    "@capacitor/filesystem": "latest-8",
-    "@capacitor/preferences": "latest-8",
-    "@capacitor/share": "latest-8",
-    "@capgo/capacitor-printer": "latest-8"
+    "@capacitor/filesystem": "8.1.5",
+    "@capacitor/preferences": "8.0.1",
+    "@capacitor/share": "8.0.3",
+    "@capgo/capacitor-printer": "8.1.8"
   },
   "devDependencies": {
     "@capacitor/cli": "8.6.0",
