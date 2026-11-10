@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 22
 
-      - name: Set up Java 21
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -32,6 +32,13 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: latest
+          accept-android-sdk-licenses: true
+          packages: |
+            platform-tools
+            platforms;android-35
+            build-tools;35.0.0
 
       - name: Install dependencies
         working-directory: attendance-capacitor
@@ -42,6 +49,10 @@ jobs:
         run: |
           cat src/app.part*.js > src/app.js
           cat www/index.part*.html > www/index.html
+
+      - name: Check application JavaScript
+        working-directory: attendance-capacitor
+        run: node --check src/app.js
 
       - name: Create Android project
         working-directory: attendance-capacitor
