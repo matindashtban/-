@@ -1,0 +1,24 @@
+{
+  "name": "class-attendance-android",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Android app for Persian classroom attendance",
+  "scripts": {
+    "build": "esbuild src/app.js --bundle --platform=browser --format=iife --target=es2020 --outfile=www/app.bundle.js",
+    "android:add": "cap add android",
+    "android:sync": "npm run build && cap sync android",
+    "android:build": "npm run android:sync && cd android && ./gradlew assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.6.0",
+    "@capacitor/core": "8.6.0",
+    "@capacitor/filesystem": "latest-8",
+    "@capacitor/preferences": "latest-8",
+    "@capacitor/share": "latest-8",
+    "@capgo/capacitor-printer": "latest-8"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.6.0",
+    "esbuild": "^0.25.0"
+  }
+}
